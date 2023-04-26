@@ -1,1 +1,1 @@
-# microservices workshop from Amigoscode
+# microservices workshop
