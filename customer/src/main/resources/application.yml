@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
 spring:
   application:
     name: customer
@@ -11,7 +16,7 @@ spring:
     username: postgres
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:

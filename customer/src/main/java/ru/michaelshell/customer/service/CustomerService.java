@@ -22,7 +22,7 @@ public class CustomerService {
                 .email(request.email())
                 .build();
         customerRepository.saveAndFlush(customer);
-        FraudCheckResponse response = restTemplate.getForObject("http://localhost:8081/api/v1/fraud-check/{customerId}",
+        FraudCheckResponse response = restTemplate.getForObject("http://FRAUD/api/v1/fraud-check/{customerId}",
                 FraudCheckResponse.class, customer.getId());
         assert response != null;
         if (response.isFraudster()) {
