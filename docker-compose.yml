@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+
+  pg_customer:
+    image: postgres:15.1
+    container_name: postgres_customer
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=customer
+    ports:
+      - "5435:5432"
+    volumes:
+      - pg_customer:/var/lib/postgresql/data
+
+  pg_fraud:
+    image: postgres:15.1
+    container_name: postgres_fraud
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=fraud
+    ports:
+      - "5436:5432"
+    volumes:
+      - pg_fraud:/var/lib/postgresql/data
+
+volumes:
+  pg_customer:
+  pg_fraud:

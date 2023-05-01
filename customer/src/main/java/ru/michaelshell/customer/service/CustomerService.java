@@ -2,7 +2,9 @@ package ru.michaelshell.customer.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import ru.michaelshell.customer.dto.CustomerRegisterRequest;
+import ru.michaelshell.customer.dto.FraudCheckResponse;
 import ru.michaelshell.customer.entity.Customer;
 import ru.michaelshell.customer.repository.CustomerRepository;
 
@@ -11,6 +13,7 @@ import ru.michaelshell.customer.repository.CustomerRepository;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final RestTemplate restTemplate;
 
     public Customer createCustomer(CustomerRegisterRequest request) {
         Customer customer = Customer.builder()
@@ -18,6 +21,13 @@ public class CustomerService {
                 .lastName(request.lastName())
                 .email(request.email())
                 .build();
-        return customerRepository.save(customer);
+        customerRepository.saveAndFlush(customer);
+        FraudCheckResponse response = restTemplate.getForObject("http://localhost:8081/api/v1/fraud-check/{customerId}",
+                FraudCheckResponse.class, customer.getId());
+        assert response != null;
+        if (response.isFraudster()) {
+            throw new IllegalStateException("Customer is fraudster!");
+        }
+        return customer;
     }
 }

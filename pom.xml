@@ -14,6 +14,7 @@
   <url>http://www.michaelshell.ru</url>
   <modules>
     <module>customer</module>
+    <module>fraud</module>
   </modules>
 
   <properties>
