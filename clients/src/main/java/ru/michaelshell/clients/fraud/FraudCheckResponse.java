@@ -1,4 +1,4 @@
-package ru.michaelshell.fraud.dto;
+package ru.michaelshell.clients.fraud;
 
 public record FraudCheckResponse(boolean isFraudster) {
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.michaelshell.fraud.dto.FraudCheckResponse;
+import ru.michaelshell.clients.fraud.FraudCheckResponse;
 import ru.michaelshell.fraud.service.FraudCheckHistoryService;
 
 @RestController
