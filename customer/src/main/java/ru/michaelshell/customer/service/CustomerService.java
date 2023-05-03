@@ -1,6 +1,7 @@
 package ru.michaelshell.customer.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.michaelshell.clients.notification.NotificationClient;
 import ru.michaelshell.clients.fraud.dto.FraudCheckResponse;
@@ -11,6 +12,7 @@ import ru.michaelshell.customer.entity.Customer;
 import ru.michaelshell.customer.repository.CustomerRepository;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CustomerService {
 
@@ -29,17 +31,19 @@ public class CustomerService {
 //        FraudCheckResponse response = restTemplate.getForObject("http://FRAUD/api/v1/fraud-check/{customerId}",
 //                FraudCheckResponse.class, customer.getId());
         FraudCheckResponse response = fraudClient.isFraudster(customer.getId());
+        log.info("Sent request to fraud with customerId {}", customer.getId());
 
         assert response != null;
         if (response.isFraudster()) {
             throw new IllegalStateException("Customer is fraudster!");
         }
 
-        notificationClient.notification(new NotificationRequest(customer.getEmail(),
+        NotificationRequest notificationRequest = new NotificationRequest(customer.getEmail(),
                 "Welcome, " + customer.getFirstName(),
                 customer.getId()
-                ));
-
+        );
+        notificationClient.notification(notificationRequest);
+        log.info("Sent request to notification service with {}", notificationRequest);
         return customer;
     }
 }
