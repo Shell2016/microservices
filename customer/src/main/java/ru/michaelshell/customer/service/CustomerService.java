@@ -3,9 +3,10 @@ package ru.michaelshell.customer.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.michaelshell.clients.notification.NotificationClient;
-import ru.michaelshell.clients.fraud.dto.FraudCheckResponse;
+import ru.michaelshell.amqp.RabbitMQMessageProducer;
 import ru.michaelshell.clients.fraud.FraudClient;
+import ru.michaelshell.clients.fraud.dto.FraudCheckResponse;
+import ru.michaelshell.clients.notification.NotificationClient;
 import ru.michaelshell.clients.notification.dto.NotificationRequest;
 import ru.michaelshell.customer.dto.CustomerRegisterRequest;
 import ru.michaelshell.customer.entity.Customer;
@@ -20,6 +21,7 @@ public class CustomerService {
     //    private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
     private final NotificationClient notificationClient;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     public Customer createCustomer(CustomerRegisterRequest request) {
         Customer customer = Customer.builder()
@@ -42,7 +44,12 @@ public class CustomerService {
                 "Welcome, " + customer.getFirstName(),
                 customer.getId()
         );
-        notificationClient.notification(notificationRequest);
+
+
+//        notificationClient.notification(notificationRequest);
+        rabbitMQMessageProducer.publish(notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key");
         log.info("Sent request to notification service with {}", notificationRequest);
         return customer;
     }

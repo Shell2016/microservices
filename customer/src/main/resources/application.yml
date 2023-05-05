@@ -23,3 +23,5 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
+  rabbitmq:
+    addresses: localhost:5672
