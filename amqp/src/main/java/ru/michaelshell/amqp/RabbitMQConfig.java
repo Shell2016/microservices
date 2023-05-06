@@ -24,14 +24,14 @@ public class RabbitMQConfig {
         return rabbitTemplate;
     }
 
-
-    @Bean
-    public SimpleRabbitListenerContainerFactory factory() {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setMessageConverter(jacksonConverter());
-        return factory;
-    }
+    //this bean not required
+//    @Bean
+//    public SimpleRabbitListenerContainerFactory factory() {
+//        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+//        factory.setConnectionFactory(connectionFactory);
+//        factory.setMessageConverter(jacksonConverter());
+//        return factory;
+//    }
 
     @Bean
     public MessageConverter jacksonConverter() {
