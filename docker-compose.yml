@@ -44,6 +44,31 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  eureka-server:
+    image: shell2016/eureka-server:latest
+    container_name: eureka-server
+    depends_on:
+      - zipkin
+    ports:
+      - "8761:8761"
+    networks:
+      - spring
+
+  apigw:
+    image: shell2016/apigw:latest
+    container_name: apigw
+    depends_on:
+      - zipkin
+      - eureka-server
+    ports:
+      - "8083:8083"
+    networks:
+      - spring
+
 volumes:
   pg_customer:
   pg_fraud:
+
+networks:
+  spring:
+    driver: bridge
