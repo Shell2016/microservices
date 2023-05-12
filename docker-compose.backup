@@ -2,20 +2,35 @@ version: "3.8"
 
 services:
 
-  postgres:
+  pg_customer:
     image: postgres:15.1
-    container_name: postgres
+    container_name: pg_customer
     restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=microservices
+      - POSTGRES_DB=customer
     ports:
-      - "5432:5432"
+      - "5435:5432"
     networks:
-      - postgres
+      - pg_customer
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - pg_customer:/var/lib/postgresql/data
+
+  pg_fraud:
+    image: postgres:15.1
+    container_name: pg_fraud
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=fraud
+    ports:
+      - "5436:5432"
+    networks:
+      - pg_fraud
+    volumes:
+      - pg_fraud:/var/lib/postgresql/data
 
   zipkin:
     image: openzipkin/zipkin
@@ -67,14 +82,14 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - postgres
+      - pg_customer
       - rabbitmq
       - eureka-server
       - zipkin
     ports:
       - "8080:8080"
     networks:
-      - postgres
+      - pg_customer
       - spring
 
   fraud:
@@ -83,14 +98,14 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - postgres
+      - pg_fraud
       - zipkin
       - eureka-server
       - rabbitmq
     ports:
       - "8081:8081"
     networks:
-      - postgres
+      - pg_fraud
       - spring
 
   notification:
@@ -99,21 +114,24 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - postgres
+      - pg_fraud
       - zipkin
       - eureka-server
       - rabbitmq
     ports:
       - "8082:8082"
     networks:
-      - postgres
+      - pg_fraud
       - spring
 
 volumes:
-  postgres:
+  pg_customer:
+  pg_fraud:
 
 networks:
-  postgres:
+  pg_customer:
+    driver: bridge
+  pg_fraud:
     driver: bridge
   spring:
     driver: bridge

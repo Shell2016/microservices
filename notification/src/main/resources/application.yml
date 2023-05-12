@@ -9,7 +9,7 @@ spring:
     name: notification
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5436/notification
+    url: jdbc:postgresql://localhost:5435/microservices
     password: pass
     username: postgres
   jpa:
