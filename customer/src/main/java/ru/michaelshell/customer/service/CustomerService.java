@@ -20,7 +20,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     //    private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
-    private final NotificationClient notificationClient;
+//    private final NotificationClient notificationClient;
     private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     public Customer createCustomer(CustomerRegisterRequest request) {

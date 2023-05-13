@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.michaelshell.clients.fraud.dto.FraudCheckResponse;
 
-@FeignClient("fraud")
+@FeignClient(
+        name = "fraud",
+        url = "${clients.fraud.url}"
+)
 public interface FraudClient {
 
     @GetMapping("/api/v1/fraud-check/{customerId}")

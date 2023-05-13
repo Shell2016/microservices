@@ -7,7 +7,5 @@ eureka:
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/microservices
-  rabbitmq:
-    addresses: rabbitmq:5672
   zipkin:
     base-url: http://zipkin:9411
